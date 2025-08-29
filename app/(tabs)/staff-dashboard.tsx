@@ -1,0 +1,103 @@
+import { useState, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuditLogEntry } from '@/types';
+
+// Mock audit log data with employee and resident operations
+const generateMockAuditLogs = (): AuditLogEntry[] => [
+  {
+    id: 'audit_1',
+    userId: 'staff1',
+    userName: 'سارة أحمد المحمد',
+    userRole: 'manager',
+    action: 'payment_accepted',
+    entityType: 'payment',
+    entityId: 'payment_001',
+    entityName: 'محمد أحمد السعيد - A-101',
+    details: {
+      amount: 2875,
+      reason: 'Payment confirmed by manager',
+      notes: 'Payment for January 2025 rent',
+      residentName: 'محمد أحمد السعيد',
+      unitLabel: 'A-101',
+      propertyName: 'برج العلامة',
+    },
+    timestamp: '2025-01-15T14:30:00Z',
+  },
+  {
+    id: 'audit_2',
+    userId: 'staff2',
+    userName: 'خالد محمد الأحمد',
+    userRole: 'accountant',
+    action: 'payment_declined',
+    entityType: 'payment',
+    entityId: 'payment_002',
+    entityName: 'فاطمة علي الزهراني - B-205',
+    details: {
+      amount: 3000,
+      reason: 'Insufficient payment evidence',
+      notes: 'Receipt not clear, requested resubmission',
+      residentName: 'فاطمة علي الزهراني',
+      unitLabel: 'B-205',
+      propertyName: 'مجمع النور السكني',
+    },
+    timestamp: '2025-01-14T16:45:00Z',
+  },
+  {
+    id: 'audit_3',
+    userId: 'staff1',
+    userName: 'سارة أحمد المحمد',
+    userRole: 'manager',
+    action: 'contract_edited',
+    entityType: 'contract',
+    entityId: 'contract_001',
+    entityName: 'خالد محمد الأحمد - C-301',
+    details: {
+      before: { monthlyRent: 2500 },
+      after: { monthlyRent: 2700 },
+      reason: 'Annual rent increase',
+      notes: 'Applied 8% increase as per contract terms',
+      residentName: 'خالد محمد الأحمد',
+      unitLabel: 'C-301',
+    },
+    timestamp: '2025-01-13T11:20:00Z',
+  },
+  {
+    id: 'audit_4',
+    userId: 'staff2',
+    userName: 'خالد محمد الأحمد',
+    userRole: 'accountant',
+    action: 'discount_applied',
+    entityType: 'payment',
+    entityId: 'payment_003',
+    entityName: 'سارة أحمد المحمد - D-402',
+    details: {
+      amount: 200,
+      reason: 'Long-term tenant discount',
+      notes: 'Applied 5% discount for 2-year lease renewal',
+      residentName: 'سارة أحمد المحمد',
+      unitLabel: 'D-402',
+    },
+    timestamp: '2025-01-12T09:15:00Z',
+  },
+  {
+    id: 'audit_5',
+    userId: 'staff1',
+    userName: 'سارة أحمد المحمد',
+    userRole: 'manager',
+    action: 'tenant_updated',
+    entityType: 'tenant',
+    entityId: 'tenant_001',
+    entityName: 'عبدالله محمد الغامدي',
+    details: {
+      before: { phoneE164: '+966501111111' },
+      after: { phoneE164: '+966502222222' },
+      reason: 'Phone number update requested by tenant',
+      notes: 'Updated contact information',
+      residentName: 'عبدالله محمد الغامدي',
+    },
+    timestamp: '2025-01-11T13:45:00Z',
+  },
+  {
+    id: 'audit_6',
+  }
+]
